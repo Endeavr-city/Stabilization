@@ -16,5 +16,6 @@ while (True):
         break
 
 vid1.release()
+vid2.release()
 
 cv2.destroyAllWindows()
