@@ -1,4 +1,4 @@
-"""import numpy as np
+import numpy as np
 import cv2
 import imutils
 
@@ -143,24 +143,37 @@ class Stitcher:
         #return the visualization 
         return vis
 
-"""
-import argparse
-import cv2
-import imutils
-import numpy as np
+
 
 
 
 # load the two images and resize them to have a width of 400 pixels
 # (for faster processing)
-imageA = cv2.imread("image1.png", cv2.IMREAD_COLOR)
+#imageA = cv2.imread("image1.png", cv2.IMREAD_COLOR)
+#imageA = imutils.resize(imageA, width=900)
 #cv2.imshow("image",imageA)
-imageB = cv2.imread("image2.png",cv2.IMREAD_COLOR)
+#imageB = cv2.imread("image2.png",cv2.IMREAD_COLOR)
+#imageB = imutils.resize(imageB, width=900)
+#concatenate image Horizontally 
+#Hori = np.concatenate((imageA, imageB), axis=1)
+
+#Verti = np.concatenate((imageA, imageB), axis=0)
+
+#cv2.imshow('Horizontal', Hori)
+#cv2.imshow('Vertical',Verti)
+"""
+image = cv2.imread("image1.png")
+aa = cv2.imread("image1.png",cv2.IMREAD_COLOR)
+bb = cv2.imread("image2.png",cv2.IMREAD_COLOR)
+cv2.imshow("frame1",aa)
+cv2.imshow("frame2",bb)
+"""
+
 #cv2.imshow("image",imageB)
-ret1, frame1 = imageA
-ret2, frame2 = imageB
-frame = cv2.hconcat([frame1,frame2])
-cv2.imshow("frame",frame)
+#ret1, frame1 = imageA
+#ret2, frame2 = imageB
+#frame = cv2.hconcat([frame1,frame2])
+#cv2.imshow("frame",frame)
 #imageB = cv2.imread(args["second"])
 #imageA = imutils.resize(imageA,)
 #imageB = imutils.resize(imageB, width=400)
@@ -172,7 +185,7 @@ cv2.imshow("frame",frame)
 #frame = cv2.hconcat([frame1, frame2]) #Concatenates the two video feeds side by side
 
 #cv2.imshow('frame', frame) #Displays the camera videos
-cv2.waitKey(0)
+#cv2.waitKey(0)
 #cv2.destroyAllWindows()
 """while (True):
     ret1, frame1 = vid1.read() #reads the frames from Camera 1 
@@ -188,4 +201,4 @@ cv2.waitKey(0)
 vid1.release()
 vid2.release()"""
 
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()
