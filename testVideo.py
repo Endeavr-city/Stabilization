@@ -58,19 +58,25 @@ class Stitcher:
 			# other (i.e. Lowe's ratio test)
             if len(m) == 2 and m[0].distance < m[1].distance * ratio:
                 matches.append((m[0].trainIdx, m[0].queryIdx))
-            if len(matches) > 4:
-                # construct the two sets of points
+
+            #computing a homography requires at least 4 matches
+            if (len(matches) > 4): 
+                #construct the two sets of points
                 ptsA = np.float32([kpsA[i] for (_, i) in matches])
                 ptsB = np.float32([kpsB[i] for (i, _) in matches])
-                # compute the homography between the two sets of points
-                (H, status) = cv2.findHomography(ptsA, ptsB, cv2.RANSAC,
-                    reprojThresh)
-                # return the matches along with the homograpy matrix
+
+                #compute the homography between the two sets of points 
+                (H, status) = cv2.findHomography(ptsA, ptsB, cv2.RANSAC, reprojThresh)
+
+                #return the matches along witht the homography matrix
                 # and status of each matched point
                 return (matches, H, status)
-		# otherwise, no homograpy could be computed
-        return None
-    def drawMatches(self, imageA, imageB, kpsA, kpsB, matches, status):
+            
+            #otherwise, no homography cou;d be computed
+            return None
+        
+    def drawMatches(self, imageA, imageB, kpsA, kpsB, matches, status): 
+        #initialize the output visualiation image
         (hA, wA) = imageA.shape[:2]
         (hB, wB) = imageB.shape[:2]
         vis = np.zeros((max(hA, hB), wA + wB, 3), dtype="uint8")
@@ -85,5 +91,27 @@ class Stitcher:
                 ptA = (int(kpsA[queryIdx][0]), int(kpsA[queryIdx][1]))
                 ptB = (int(kpsB[trainIdx][0]) + wA, int(kpsB[trainIdx][1]))
                 cv2.line(vis, ptA, ptB, (0, 255, 0), 1)
-		# return the visualization
+
+        #return the visualization 
         return vis
+ 
+
+"""
+vid1 = cv2.VideoCapture(1) #Get Video feed from Camera 1
+vid2 = cv2.VideoCapture(2) #Get video feed from Camera 2
+
+while (True):
+    ret1, frame1 = vid1.read() #reads the frames from Camera 1 
+    ret2, frame2 = vid2.read() #reads the frames from Camera 2
+
+    frame = cv2.hconcat([frame1, frame2]) #Concatenates the two video feeds side by side
+
+    cv2.imshow('frame', frame) #Displays the camera videos
+
+    if cv2.waitKey(1) & 0xFF == ord('q'): #If 'q' is pressed it will kill the programe
+        break
+
+vid1.release()
+vid2.release()
+
+cv2.destroyAllWindows()"""
