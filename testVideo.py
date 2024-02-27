@@ -1,4 +1,4 @@
-import numpy as np
+"""import numpy as np
 import cv2
 import imutils
 
@@ -11,33 +11,34 @@ class Stitcher:
     def stitch(self, images, ratio=0.75, reprojThresh = 4.0, showMatches=False):
         #unpack images
         (imageB, imageA) = images
+        (imageB, imageA) = images
 
-        #if self.cachedH is None:
+        if self.cachedH is None:
             #find keypoints and extract
-        (kpsA, featuresA) = self.detectAndDescribe(imageA)
-        (kpsB, featuresB) = self.detectAndDescribe(imageB)
+            (kpsA, featuresA) = self.detectAndDescribe(imageA)
+            (kpsB, featuresB) = self.detectAndDescribe(imageB)
 
             #match features between images
-        M = self.matchKeyPoints(kpsA, kpsB, featuresA, featuresB, ratio, reprojThresh)
+            M = self.matchKeypoints(kpsA, kpsB, featuresA, featuresB, ratio, reprojThresh)
 
             #if no match then return nothing
-        if M is None:
-            return None
+            if M is None:
+                return None
             
             #cache the homography matrix
-           #self.cachedH = M[1]
+            self.cachedH = M[1]
         #otherwise, apply a perspective warp to stich the image together
-        (matches, H, status) = M
+        #(matches, H, status) = M
 
-        result = cv2.warpPerspective(imageA, H, (imageA.shape[1] + imageB.shape[1], imageA.shape[0]))
+        result = cv2.warpPerspective(imageA, self.cachedH, (imageA.shape[1] + imageB.shape[1], imageA.shape[0]))
         result[0:imageB.shape[0], 0:imageB.shape[1]] = imageB
 
         #check to see if the keypoint matches should be visualized
-        if showMatches: 
-            vis = self.drawMatches(imageA, imageB, kpsA, kpsB, matches, status)
+        #if showMatches: 
+            #vis = self.drawMatches(imageA, imageB, kpsA, kpsB, matches, status)
 
             #return a tuple of the sitched image and the visualization 
-            return (result, vis)
+        #return (result, vis)
         
         #return the stitched image
         return result
@@ -58,8 +59,18 @@ class Stitcher:
         #check to see if we ae using OpenCV 3.X 
         if self.isv3: 
             #detect and extract features fom the image
-            descriptor = cv2.xfeatures2d.SIFT_create()
-            (kps, features) = descriptor.detectAndCompute(image, None)
+            #descriptor = cv2.xfeatures2d.SIFT_create()
+            #descriptor = cv2.xfeatures2d.SURF_create()
+            #descriptor = cv2.SIFT()
+            #print("PASSES THROUGH isv3 check")
+            descriptor = cv2.SIFT_create()
+            #print(descriptor)
+            (kps, features) = descriptor.detectAndCompute(gray, None)
+            #print("Printing out kps here: ")
+            #print(kps)
+            #print("Printing out features here: ")
+            #print(features)
+            #(kps, features) = descriptor.detectAndCompute(image, None)
 
         #otherwise we are using OpenCV 2.4.X: 
         else: 
@@ -72,7 +83,7 @@ class Stitcher:
             (kps, features) = extractor.compute(gray, kps)
 
         #convert the keypoints from KeyPoint objects to Numpy arrays
-        kps = np.float32((kp.pt for kp in kps))
+        kps = np.float32([kp.pt for kp in kps])
 
         #return a tuple of keypoints anf features
         return (kps, features)
@@ -81,17 +92,23 @@ class Stitcher:
         # compute the raw matches and intialize the list of actual matches
         matcher = cv2.DescriptorMatcher_create("BruteForce")
         rawMatches = matcher.knnMatch(featuresA, featuresB, 2)
+        #print("Raw Matches: ")
+        #print(rawMatches)
         matches = []
 
         #loop over the raw matches
         for m in rawMatches: 
             # ensure th distance is within a certain ratio of each 
             # other (i.e. Lowe's ratio test)
+            print("M0 Distance: ", m[0].distance)
+            print("M1 Distance: ", m[1].distance * ratio)
             if (len(m) == 2) and m[0].distance < m[1].distance * ratio: 
                 matches.append((m[0].trainIdx, m[0].queryIdx))
 
+            print("Before matches")
             #computing a homography requires at least 4 matches
             if (len(matches) > 4): 
+                print("After matches")
                 #construct the two sets of points
                 ptsA = np.float32([kpsA[i] for (_, i) in matches])
                 ptsB = np.float32([kpsB[i] for (i, _) in matches])
@@ -125,13 +142,39 @@ class Stitcher:
 
         #return the visualization 
         return vis
- 
 
 """
-vid1 = cv2.VideoCapture(1) #Get Video feed from Camera 1
-vid2 = cv2.VideoCapture(2) #Get video feed from Camera 2
+import argparse
+import cv2
+import imutils
+import numpy as np
 
-while (True):
+
+
+# load the two images and resize them to have a width of 400 pixels
+# (for faster processing)
+imageA = cv2.imread("image1.png", cv2.IMREAD_COLOR)
+#cv2.imshow("image",imageA)
+imageB = cv2.imread("image2.png",cv2.IMREAD_COLOR)
+#cv2.imshow("image",imageB)
+ret1, frame1 = imageA
+ret2, frame2 = imageB
+frame = cv2.hconcat([frame1,frame2])
+cv2.imshow("frame",frame)
+#imageB = cv2.imread(args["second"])
+#imageA = imutils.resize(imageA,)
+#imageB = imutils.resize(imageB, width=400)
+#vid1 = cv2.VideoCapture(1) #Get Video feed from Camera 1
+#vid2 = cv2.VideoCapture(2) #Get video feed from Camera 2
+
+#ret1, frame1 = imageA
+#ret2, frame2 = imageB
+#frame = cv2.hconcat([frame1, frame2]) #Concatenates the two video feeds side by side
+
+#cv2.imshow('frame', frame) #Displays the camera videos
+cv2.waitKey(0)
+#cv2.destroyAllWindows()
+"""while (True):
     ret1, frame1 = vid1.read() #reads the frames from Camera 1 
     ret2, frame2 = vid2.read() #reads the frames from Camera 2
 
@@ -143,6 +186,6 @@ while (True):
         break
 
 vid1.release()
-vid2.release()
+vid2.release()"""
 
-cv2.destroyAllWindows()"""
+cv2.destroyAllWindows()
