@@ -4,7 +4,6 @@ import numpy as np
 import cv2
 import imutils
 import argparse
-from imutils.video import VideoStream
 
 #show the images
 """image = cv2.imread("image1.png")
@@ -20,16 +19,20 @@ aa = cv2.imread("image1.png",cv2.IMREAD_COLOR)
 bb = cv2.imread("image2.png",cv2.IMREAD_COLOR)
 #leftCamera = VideoStream(src=1).start()
 #rightCamera = VideoStream(src=2).start()
+leftCamera = cv2.VideoCapture(0)  # 첫 번째 카메라
+rightCamera = cv2.VideoCapture(2)  # 두 번째 카메라
 
 #initialize stitcher program
 stitcher = Stitcher()
+# result=leftCamera.read()[1]
+# result_2=rightCamera.read()[1]
 
 while True:
     #Read camera feed from both cameras
-    #left = leftCamera.read()
-    #right = rightCamera.read()
-    left = aa
-    right = bb
+    _, left = leftCamera.read()
+    _, right = rightCamera.read()
+    #left = aa
+    #right = bb
 
     #frame re-sizing
     #left = imutils.resize(left, width=400)
@@ -42,11 +45,14 @@ while True:
     if result is None:
         print("Homography could not be computed")
         break
+    break
+# 이미지 저장
+cv2.imwrite('resized_image.jpg', result)
+exit()
+    # cv2.imshow("Result", result)
 
-    cv2.imshow("Result", result)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'): #If 'q' is pressed it will kill the programe
-        break
+    # if cv2.waitKey(1) & 0xFF == ord('q'): #If 'q' is pressed it will kill the programe
+    #     break
 
 #do the cleanup portion here to stop processing 
 print("[INFO] cleaning up...")
