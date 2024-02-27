@@ -29,8 +29,9 @@ class Stitcher:
             self.cachedH = M[1]
         #otherwise, apply a perspective warp to stich the image together
         #(matches, H, status) = M
-
+            #    result[0:imageB.shape[0], 0:imageB.shape[1]] = imageB
         result = cv2.warpPerspective(imageA, self.cachedH, (imageA.shape[1] + imageB.shape[1], imageA.shape[0]))
+        imageB = cv2.resize(imageB, (result.shape[1], result.shape[0]))
         result[0:imageB.shape[0], 0:imageB.shape[1]] = imageB
 
         #check to see if the keypoint matches should be visualized
@@ -97,6 +98,7 @@ class Stitcher:
         matches = []
 
         #loop over the raw matches
+        print(len(rawMatches))
         for m in rawMatches: 
             # ensure th distance is within a certain ratio of each 
             # other (i.e. Lowe's ratio test)
@@ -104,7 +106,8 @@ class Stitcher:
             print("M1 Distance: ", m[1].distance * ratio)
             if (len(m) == 2) and m[0].distance < m[1].distance * ratio: 
                 matches.append((m[0].trainIdx, m[0].queryIdx))
-
+            print(matches)
+            print(m)
             print("Before matches")
             #computing a homography requires at least 4 matches
             if (len(matches) > 4): 
@@ -121,7 +124,7 @@ class Stitcher:
                 return (matches, H, status)
             
             #otherwise, no homography cou;d be computed
-            return None
+        return None
         
     def drawMatches(self, imageA, imageB, kpsA, kpsB, matches, status): 
         #initialize the output visualiation image
