@@ -1,5 +1,5 @@
 import cv2
-#from ultralytics import YOLO
+from ultralytics import YOLO
 #from ultralytics.utils.plotting import Annotator, colors
 #import required libraries
 #from vidgear.vidgear.gears import WriteGear
@@ -16,6 +16,9 @@ stream = cv2.VideoCapture(0) #for getting camera feed
 #initiate the stabilizer object with defined parameters
 #regular normal parameters used, initial smoothing r=30, border_size = 5
 stab = Stabilizer(smoothing_radius=18, crop_n_zoom=True, border_size=5, logging=False)
+
+#Initialize the model to be used for segmentation
+model = YOLO("bestv2_1_coco.pt")
 
 # process the frame-rate, width and height
 fps = stream.get(cv2.CAP_PROP_FPS)
@@ -57,6 +60,10 @@ while True:
     # send current frame to stabilizer for processing
     stabilized_frame = stab.stabilize(frame)
 
+    # Send stabilized frame to segmentation model
+    results = model.predict(stabilized_frame, conf=0.6)
+    annotated_frame = results[0].plot(boxes=True)
+
     # Calculating the fps 
     # fps will be number of frame processed in given time frame 
     # since their will be most of time error of 0.001 second 
@@ -71,7 +78,7 @@ while True:
     fps_internal = str(fps_internal)
 
     # putting the FPS count on the frame
-    cv2.putText(stabilized_frame, fps_internal, (7, 70), font, 3, (100, 255, 0), 3, cv2.LINE_AA)
+    cv2.putText(annotated_frame, fps_internal, (7, 70), font, 3, (100, 255, 0), 3, cv2.LINE_AA)
 
     #cv2.imshow("instance-segmentation", stabilized_frame)
 
@@ -81,8 +88,8 @@ while True:
     latencies.append(endLatency) #append each latency to the latencies list
     #cv2.waitKey(10)
 
-    # write stabilized frame onto output
-    out.write(stabilized_frame)
+    # write stabilized and segmented frame onto output
+    out.write(annotated_frame)
 
     # if possible, press q to exit the program, else Ctrl-C in the terminal to do so
     if cv2.waitKey(1) & 0xFF == ord('q'):
