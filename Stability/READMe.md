@@ -10,6 +10,7 @@ For Video Stability, we have provided a brief summary of the contents of each co
 9. testIMU.py - Collects acceleration and gyroscope data from an MPU chip, and writes to a CSV file. 
 10. vidGearWithFeed.py - Uses VidGear's video stream capture method to capture and record stabilized footage. Utilizes VidGear stabilization algorithm for video stability. 
 11. vidGearWithFeedCapture.py - Uses openCV's video stream capture method to capture and record stabilized footage. Utilizes VidGear stabilization algorithm for video video stability. 
+12. setup.py - VidGear setup file. Refer to videgear documentation for understanding. 
 
 Important/Relevant Links: 
 - Optical Flow Implementation used by team: https://mpolinowski.github.io/docs/IoT-and-Machine-Learning/ML/2021-12-10--opencv-optical-flow-tracking/2021-12-10/
