@@ -14,7 +14,9 @@ As an overview, the three main aspects of this project are described below:
 
 2. Video Stabilization: The main idea here is that for whatever video feed the user is able to obtain from either one camera or two cameras, if the feed is concatenated or stitched together, the video feed should be stable in most conditions. For this portion, the team relied on the video stabilization references provided by the VidGear open source library. For additional references, please refer to official vidGear documentation. 
 
-3. Object Segmentation: During the drive time of a vehicle, the algorithm will be able to utilize either feed from one camera/video, or two cameras accordingly, and segment specific objects it encounters along the path. It creates a bounding shape around specific objects and classifies them appropriately, whether its a car, road sign, pedestrian, or road pavement etc. The team utilized 6,884 images in the training set of this YOLOv8n segmentation model. For further references, refer to the official YOLOv8 documentation: https://docs.ultralytics.com. 
+3. Object Segmentation: During the drive time of a vehicle, the algorithm will be able to utilize either feed from one camera/video, or two cameras accordingly, and segment specific objects it encounters along the path. It creates a bounding shape around specific objects and classifies them appropriately, whether its a car, road sign, pedestrian, or road pavement etc. The team utilized 6,884 images in the training set of this YOLOv8n segmentation model. For further references, refer to the official YOLOv8 documentation: https://docs.ultralytics.com.
+
+4. For all data, please download the files: https://drive.google.com/drive/folders/1cKO4GxSiXMJLIV55HYffraHwzMR3Ew8P?usp=sharing
 
 
 Important/Relevant VidGear Links: 
