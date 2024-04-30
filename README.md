@@ -18,11 +18,18 @@ Once the key feature points are detected from both images, the cameras would be 
 
 Important/Relevant VidGear Links: 
 https://abhitronix.github.io/vidgear/latest/gears/stabilizer/usage/#using-videogear-with-stabilizer-backend
+
 https://abhitronix.github.io/vidgear/latest/gears/stabilizer/params/#crop_n_zoom
+
 https://abhitronix.github.io/vidgear/latest/switch_from_cv/#switching-videocapture-apis
+
 https://abhitronix.github.io/vidgear/latest/gears/videogear/usage/#bonus-examples
+
 https://github.com/abhiTronix/vidgear?tab=readme-ov-file
 
 3. Object Segmentation: During the drive time of a vehicle, the algorithm will be able to utilize either feed from one camera/video, or two cameras accordingly, and segment specific objects it encounters along the path. It creates a bounding shape around specific objects, and classifies them appropriately, whether its a car, road sign, pedestrian, or road pavement etc. The team utilized over 6000 images to train the YoloV8 segmentation model on common road objects, such as a car, pedestrian and road signs. For further references, refer to the official YoloV8 documentation: https://docs.ultralytics.com. 
 
 Official Ultralytics GitHub: https://github.com/ultralytics/ultralytics. 
+
+Official Website for the ENDEAVR Institute: https://endeavr.city
+Official LinkedIn page for the ENDEAVR Institute: https://www.linkedin.com/company/endeavr-institute
